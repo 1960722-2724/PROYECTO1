@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package vista;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -24,7 +22,7 @@ import javax.swing.SwingConstants;
  *
  * @author andre
  */
-public class VentanaJuego {
+public class VentanaJuego extends JFrame {
    private Header jpheader;
    
    private 
