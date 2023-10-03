@@ -1,6 +1,7 @@
-
 package vista;
 
+import modelo.Jugador;
+import vista.VentanaJuego;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -34,7 +35,7 @@ public class VentanaPrincipal extends JFrame {
         btnJugar.setBounds(700, 450, 200, 35);
         btnInstrucciones.setBounds(700, 500, 200, 35);
         txtNombre.setBounds(50, 450, 410, 40);
-        jpHeader.setSize(1000,300);
+        jpHeader.setSize(1000, 300);
         
         add(jpHeader);
         add(btnLimpiar);
@@ -59,34 +60,38 @@ public class VentanaPrincipal extends JFrame {
     }
 
     public static void main(String[] args) {
-        //SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
             new VentanaPrincipal().setVisible(true);
-        //});
+        });
     }
 
     class ManejadorDeEventos implements ActionListener, KeyListener {
-              public void actionPerformed(ActionEvent evento) {
+        public void actionPerformed(ActionEvent evento) {
             if (evento.getSource() == btnAceptar) {
-                btnJugar.setEnabled(true); // Habilitar el botón "Iniciar Juego"
-            } 
-            else if (evento.getSource() == btnJugar) {
-                // Aquí puedes realizar acciones cuando se hace clic en "Iniciar Juego"
+                String nombre = txtNombre.getText();
+                if (!nombre.trim().isEmpty()) {
+                    btnJugar.setEnabled(true); // Habilitar el botón "Iniciar Juego"
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor ingrese su nombre", 
+                            "Advertencia", JOptionPane.ERROR_MESSAGE);
+                    txtNombre.requestFocusInWindow();
+                }
+            } else if (evento.getSource() == btnJugar) {
+                String nombre = txtNombre.getText();
+                if (!nombre.trim().isEmpty()) {
+                    Jugador jugador = new Jugador(nombre);
+                    dispose();
+                    VentanaJuego ventanaJuego = new VentanaJuego(jugador);
+                    ventanaJuego.setVisible(true);
+                }
+            } else if (evento.getSource() == btnInstrucciones) {
                 JOptionPane.showMessageDialog(
                         null,
-                        "¡Juego iniciado para: " + txtNombre.getText(),
-                        "Mensaje",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            } 
-            else if (evento.getSource() == btnInstrucciones) {
-                        JOptionPane.showMessageDialog(
-                        null,
-                        "escoge la figura correcta, tomando como referencia la imagen de la izquierda",
+                        "Escoge la figura correcta, tomando como referencia la imagen de la izquierda",
                         "Instrucciones",
                         JOptionPane.INFORMATION_MESSAGE
                 );
-            } 
-            else if (evento.getSource() == btnLimpiar) {
+            } else if (evento.getSource() == btnLimpiar) {
                 txtNombre.setText(""); // Limpiar el campo de texto
                 btnJugar.setEnabled(false); // Deshabilitar el botón "Iniciar Juego"
             }
@@ -94,8 +99,10 @@ public class VentanaPrincipal extends JFrame {
 
         public void keyTyped(KeyEvent e) {
         }
+
         public void keyPressed(KeyEvent e) {
         }
+
         public void keyReleased(KeyEvent e) {
             if (!txtNombre.getText().isEmpty()) {
                 btnAceptar.setEnabled(true); // Habilitar el botón "Aceptar"
