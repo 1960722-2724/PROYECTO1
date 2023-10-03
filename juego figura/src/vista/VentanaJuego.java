@@ -3,6 +3,7 @@ package vista;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -17,7 +18,6 @@ public class VentanaJuego extends JFrame {
     private JButton btnTerminarJuego;
     private JLabel[] figurasLabels;
     private Jugador jugador;
-    private List<String> rutasDisponibles;
 
     public VentanaJuego(Jugador jugador) {
         super("Juego de Figuras");
@@ -27,7 +27,6 @@ public class VentanaJuego extends JFrame {
         setResizable(false);
 
         this.jugador = jugador;
-        rutasDisponibles = new ArrayList<>();
 
         initComponents();
         setupLayout();
@@ -39,53 +38,46 @@ public class VentanaJuego extends JFrame {
         lblNivel = new JLabel("Nivel: 1");
         lblIntentos = new JLabel("Intentos: 0");
         lblFallos = new JLabel("Fallos: 0");
-        lblFiguraMuestra = new JLabel();
 
         btnTerminarJuego = new JButton("Terminar Juego");
-        figurasLabels = new JLabel[4]; // Cambiamos a 4 JLabels ya que solo habrá 4 opciones
+        figurasLabels = new JLabel[4]; // Mostraremos 4 imágenes en total
 
-        String rutaMuestra = seleccionarRutaAleatoria(); // Seleccionamos la ruta de la imagen de muestra
-        ImageIcon iconoMuestra = new ImageIcon(rutaMuestra);
-        lblFiguraMuestra.setIcon(iconoMuestra);
-        lblFiguraMuestra.setName(rutaMuestra);
+        List<String> rutas = new ArrayList<>();
+        for (int i = 1; i <= 4; i++) { // Cambiamos a 4 rutas en lugar de 5
+            rutas.add("src/imagenes/nivel1/" + i + ".png");
+        }
 
-        System.out.println("Ruta de la imagen de muestra: " + rutaMuestra);
+        // Shuffle para que las imágenes estén en orden aleatorio
+        Collections.shuffle(rutas);
 
+        // Elegimos una imagen aleatoria que se mostrará dos veces (como muestra y opción)
+        Random random = new Random();
+        int indiceImagenDuplicada = random.nextInt(rutas.size());
+        String rutaImagenDuplicada = rutas.get(indiceImagenDuplicada);
+
+        // Las siguientes imágenes serán las opciones (las primeras 3)
         for (int i = 0; i < figurasLabels.length; i++) {
-            // Las imágenes de las opciones deben ser diferentes a la imagen de muestra
             String rutaOpcion;
-            do {
-                rutaOpcion = seleccionarRutaAleatoria();
-            } while (rutaOpcion.equals(rutaMuestra));
+            if (i == 3) {
+                // Si es la última opción, usamos la ruta duplicada como imagen de muestra
+                rutaOpcion = rutaImagenDuplicada;
+            } else {
+                rutaOpcion = rutas.get(i);
+            }
 
             ImageIcon iconoOpcion = new ImageIcon(rutaOpcion);
             JLabel labelOpcion = new JLabel(iconoOpcion);
             labelOpcion.setName(rutaOpcion);
             figurasLabels[i] = labelOpcion;
 
-            System.out.println("Ruta de opción " + (i + 1) + ": " + rutaOpcion);
-        }
-    }
-
-    private String seleccionarRutaAleatoria() {
-        if (rutasDisponibles.isEmpty()) {
-            reinicializarRutasDisponibles();
+            if (i == 3) {
+                lblFiguraMuestra = labelOpcion;
+            }
         }
 
-        Random random = new Random();
-        int opcionAleatoriaIndex = random.nextInt(rutasDisponibles.size());
-        String rutaSeleccionada = rutasDisponibles.get(opcionAleatoriaIndex);
-
-        rutasDisponibles.remove(opcionAleatoriaIndex);
-
-        return rutaSeleccionada;
-    }
-
-    private void reinicializarRutasDisponibles() {
-        rutasDisponibles.clear();
-
-        for (int i = 1; i <= 5; i++) {
-            rutasDisponibles.add("src/imagenes/nivel1/" + i + ".png");
+        System.out.println("Ruta de la imagen de muestra: " + lblFiguraMuestra.getName());
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Ruta de opción " + (i + 1) + ": " + figurasLabels[i].getName());
         }
     }
 
@@ -95,7 +87,7 @@ public class VentanaJuego extends JFrame {
         JPanel panelFiguraMuestra = new JPanel();
         panelFiguraMuestra.add(lblFiguraMuestra);
 
-        JPanel panelFiguras = new JPanel(new GridLayout(2, 2));
+        JPanel panelFiguras = new JPanel(new GridLayout(1, 3)); // Cambiamos a 1 fila y 3 columnas
         for (JLabel label : figurasLabels) {
             panelFiguras.add(label);
         }
@@ -110,7 +102,7 @@ public class VentanaJuego extends JFrame {
         JPanel panelBotonTerminar = new JPanel();
         panelBotonTerminar.add(btnTerminarJuego);
 
-        add(panelFiguraMuestra, BorderLayout.WEST);
+        add(panelFiguraMuestra, BorderLayout.NORTH); // Cambiamos la ubicación de la imagen de muestra
         add(panelFiguras, BorderLayout.CENTER);
         add(panelDatos, BorderLayout.EAST);
         add(panelBotonTerminar, BorderLayout.SOUTH);
