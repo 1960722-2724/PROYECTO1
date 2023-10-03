@@ -6,30 +6,28 @@ import java.util.List;
 import java.util.Random;
 
 public class JuegoFigura {
-    private List<Integer> figuras;
+    private List<Integer> figurasAleatorias;
     private int figuraCorrecta;
     private int nivel;
     private int intentos;
     private int fallos;
-    private boolean avanzarNivel;
+    private boolean nuevoNivelListo;
 
-    public JuegoFigura(int nivel) {
-        this.nivel = nivel;
+    public JuegoFigura() {
+        this.nivel = 1;
         this.intentos = 0;
         this.fallos = 0;
-        this.figuras = new ArrayList<>();
-        //this.figuraCorrecta = generarFiguraCorrecta();
+        this.figurasAleatorias = new ArrayList<>();
         iniciarNuevoNivel();
     }
 
     public void iniciarNuevoNivel() {
         generarFigurasAleatorias();
-        figuraCorrecta = generarFiguraCorrecta();
-        avanzarNivel = false; // Reiniciar la bandera de avance de nivel
+        nuevoNivelListo = false; // Reiniciar la bandera de nuevo nivel listo
     }
 
-    public List<Integer> getFiguras() {
-        return figuras;
+    public List<Integer> getFigurasAleatorias() {
+        return figurasAleatorias;
     }
 
     public int getFiguraCorrecta() {
@@ -48,26 +46,26 @@ public class JuegoFigura {
         return fallos;
     }
 
-    public boolean debeAvanzarNivel() {
-        return avanzarNivel;
+    public boolean esNuevoNivelListo() {
+        return nuevoNivelListo;
     }
 
-    public void aumentarIntentos() {
+    public void incrementarIntentos() {
         intentos++;
     }
 
-    public void aumentarFallos() {
+    public void incrementarFallos() {
         fallos++;
     }
 
     public void avanzarNivel() {
         nivel++;
         iniciarNuevoNivel(); // Iniciar un nuevo nivel
-        avanzarNivel = true; // Indicar que se debe avanzar al siguiente nivel
+        nuevoNivelListo = true; // Indicar que se ha completado el nuevo nivel
     }
 
     private void generarFigurasAleatorias() {
-        figuras.clear();
+        figurasAleatorias.clear();
         Random random = new Random();
 
         // Elegir una figura aleatoria como la correcta
@@ -76,23 +74,17 @@ public class JuegoFigura {
         // Agregar las otras figuras al azar (asegurarse de que al menos una sea la correcta)
         for (int i = 0; i < 4; i++) {
             if (i == figuraCorrecta - 1) {
-                figuras.add(figuraCorrecta);
+                figurasAleatorias.add(figuraCorrecta);
             } else {
                 int figuraAleatoria;
                 do {
                     figuraAleatoria = random.nextInt(4) + 1;
-                } while (figuras.contains(figuraAleatoria));
-                figuras.add(figuraAleatoria);
+                } while (figurasAleatorias.contains(figuraAleatoria));
+                figurasAleatorias.add(figuraAleatoria);
             }
         }
 
         // Barajar las figuras para que estén en orden aleatorio
-        Collections.shuffle(figuras);
-    }
-
-    private int generarFiguraCorrecta() {
-        // Elige una figura aleatoria como la correcta
-        Random random = new Random();
-        return figuras.get(random.nextInt(4));
+        Collections.shuffle(figurasAleatorias);
     }
 }
