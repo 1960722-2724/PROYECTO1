@@ -42,23 +42,28 @@ public class VentanaJuego extends JFrame {
         lblFiguraMuestra = new JLabel();
 
         btnTerminarJuego = new JButton("Terminar Juego");
-        figurasLabels = new JLabel[5];
+        figurasLabels = new JLabel[4]; // Cambiamos a 4 JLabels ya que solo habrá 4 opciones
+
+        String rutaMuestra = seleccionarRutaAleatoria(); // Seleccionamos la ruta de la imagen de muestra
+        ImageIcon iconoMuestra = new ImageIcon(rutaMuestra);
+        lblFiguraMuestra.setIcon(iconoMuestra);
+        lblFiguraMuestra.setName(rutaMuestra);
+
+        System.out.println("Ruta de la imagen de muestra: " + rutaMuestra);
 
         for (int i = 0; i < figurasLabels.length; i++) {
-            String rutaOpcion = seleccionarRutaAleatoria();
-            ImageIcon iconoOpcion = new ImageIcon(rutaOpcion);
+            // Las imágenes de las opciones deben ser diferentes a la imagen de muestra
+            String rutaOpcion;
+            do {
+                rutaOpcion = seleccionarRutaAleatoria();
+            } while (rutaOpcion.equals(rutaMuestra));
 
-            if (i == 4) {
-                // La quinta imagen es la muestra
-                ImageIcon iconoMuestra = iconoOpcion;
-                lblFiguraMuestra.setIcon(iconoMuestra);
-                lblFiguraMuestra.setName(rutaOpcion);
-            } else {
-                // Las otras 4 imágenes son opciones
-                JLabel labelOpcion = new JLabel(iconoOpcion);
-                labelOpcion.setName(rutaOpcion);
-                figurasLabels[i] = labelOpcion;
-            }
+            ImageIcon iconoOpcion = new ImageIcon(rutaOpcion);
+            JLabel labelOpcion = new JLabel(iconoOpcion);
+            labelOpcion.setName(rutaOpcion);
+            figurasLabels[i] = labelOpcion;
+
+            System.out.println("Ruta de opción " + (i + 1) + ": " + rutaOpcion);
         }
     }
 
@@ -72,8 +77,6 @@ public class VentanaJuego extends JFrame {
         String rutaSeleccionada = rutasDisponibles.get(opcionAleatoriaIndex);
 
         rutasDisponibles.remove(opcionAleatoriaIndex);
-
-        System.out.println("Ruta seleccionada: " + rutaSeleccionada);
 
         return rutaSeleccionada;
     }
@@ -94,9 +97,7 @@ public class VentanaJuego extends JFrame {
 
         JPanel panelFiguras = new JPanel(new GridLayout(2, 2));
         for (JLabel label : figurasLabels) {
-            if (label != null) {
-                panelFiguras.add(label);
-            }
+            panelFiguras.add(label);
         }
 
         JPanel panelDatos = new JPanel();
