@@ -2,6 +2,8 @@ package vista;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +45,7 @@ public class VentanaJuego extends JFrame {
         figurasLabels = new JLabel[4]; // Mostraremos 4 imágenes en total
 
         List<String> rutas = new ArrayList<>();
-        for (int i = 1; i <= 4; i++) { // Cambiamos a 4 rutas en lugar de 5
+        for (int i = 1; i <= 3; i++) { // Cambiamos a 4 rutas en lugar de 5
             rutas.add("src/imagenes/nivel1/" + i + ".png");
         }
 
@@ -109,10 +111,39 @@ public class VentanaJuego extends JFrame {
     }
 
     private void setupActions() {
-        // Agrega acciones de botones y clics como se hacía anteriormente
+        // Agregamos un ActionListener a cada imagen de opción
+        for (int i = 0; i < figurasLabels.length; i++) {
+            final int index = i;
+            figurasLabels[i].addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    imagenOpcionMouseClicked(evt, index);
+                }
+            });
+        }
+
+        btnTerminarJuego.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas salir del juego?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
     }
 
-    // Resto del código (actualizarVentana, mostrarResumen, main) igual que antes
+    private void imagenOpcionMouseClicked(java.awt.event.MouseEvent evt, int index) {
+        String rutaSeleccionada = figurasLabels[index].getName();
+        if (rutaSeleccionada.equals(lblFiguraMuestra.getName())) {
+            // La imagen seleccionada es la correcta
+            JOptionPane.showMessageDialog(null, "¡Felicitaciones! Has seleccionado la opción correcta.");
+            // Aquí puedes implementar la lógica para avanzar al siguiente nivel
+        } else {
+            // La imagen seleccionada es incorrecta
+            JOptionPane.showMessageDialog(null, "Has seleccionado la opción incorrecta.");
+            // Aquí puedes implementar la lógica para aumentar el contador de fallos
+        }
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
