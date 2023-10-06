@@ -23,7 +23,7 @@ public class JuegoFigura {
 
     public void iniciarNuevoNivel() {
         generarFigurasAleatorias();
-        nuevoNivelListo = false; // Reiniciar la bandera de nuevo nivel listo
+        nuevoNivelListo = false;
     }
 
     public List<Integer> getFigurasAleatorias() {

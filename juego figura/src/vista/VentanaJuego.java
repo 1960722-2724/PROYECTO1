@@ -23,15 +23,15 @@ public class VentanaJuego extends JFrame {
     private JLabel lblOpcion2;
     private JLabel lblOpcion3;
     private JButton btnNivel2;
-    private JButton btnTerminarJuego; // Nuevo botón
+    private JButton btnTerminarJuego; 
     private Jugador jugador;
 
-    private int nivel = 0; // Cambio: Inicialmente, el nivel debe ser 1
+    private int nivel = 0; 
     private int intentos = 0;
     private int fallos = 0;
-    private int intentosAcertados = 0; // Nuevo contador para intentos acertados
-    private int cicloNivelesCompletos = 0; // Nueva variable para rastrear ciclos de niveles completados
-
+    private int intentosAcertados = 0; 
+    
+    
     public VentanaJuego(Jugador jugador) {
         super("Juego de Figuras");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,25 +83,18 @@ public class VentanaJuego extends JFrame {
         panelDatos.add(lblNivel);
         panelDatos.add(lblIntentos);
         panelDatos.add(lblFallos);
-        panelDatos.add(btnTerminarJuego); // Agrega el nuevo botón al panel de datos
+        panelDatos.add(btnTerminarJuego);
 
         // Crear un JSplitPane para dividir la ventana en dos partes (izquierda y derecha)
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, lblFiguraMuestra, panelOpciones);
-        splitPane.setDividerLocation(200); // Establecer la ubicación de la división
+        splitPane.setDividerLocation(300); // Establecer la ubicación de la división
 
         add(splitPane, BorderLayout.CENTER);
         add(panelDatos, BorderLayout.SOUTH);
     }
 
     private void setupActions() {
-        btnNivel2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                nivel = 1;
-                actualizarNivel();
-            }
-        });
-
+        
         btnTerminarJuego.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -141,7 +134,7 @@ public class VentanaJuego extends JFrame {
 
     private void actualizarNivel() {
         lblNivel.setText("aciertos: " + nivel);
-        intentos = 0;
+        //intentos = 0;
         intentosAcertados = 0; // Reiniciar los intentos acertados
         lblIntentos.setText("Intentos: " + intentos);
         lblFallos.setText("Fallos: " + fallos);
@@ -177,9 +170,7 @@ public class VentanaJuego extends JFrame {
     }
 
     private void verificarSeleccion(JLabel label) {
-    intentos++;
-    lblIntentos.setText("Intentos: " + intentos);
-
+   
     // Obtener la ruta de la imagen seleccionada
     Icon icon = label.getIcon();
     if (icon != null && icon instanceof ImageIcon) {
@@ -196,12 +187,14 @@ public class VentanaJuego extends JFrame {
             if (selectedImagePath.equals(muestraImagePath)) {
                 // La selección es correcta
                 JOptionPane.showMessageDialog(this, "¡Selección Correcta!", "Correcto", JOptionPane.INFORMATION_MESSAGE);
-                
+                intentos =0;
                 intentosAcertados++; // Incrementar los intentos acertados
             } else {
                 // La selección es incorrecta
                 fallos++;
                 lblFallos.setText("Fallos: " + fallos);
+                intentos++;
+                lblIntentos.setText("Intentos: " + intentos);
                 JOptionPane.showMessageDialog(this, "Selección Incorrecta", "Incorrecto", JOptionPane.ERROR_MESSAGE);
 
                 // Reordenar las imágenes y mostrarlas en un orden diferente

@@ -17,7 +17,7 @@ public class VentanaPrincipal extends JFrame {
     public VentanaPrincipal() {
         setTitle("Juego de Figuras");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 650);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(null);
@@ -44,10 +44,16 @@ public class VentanaPrincipal extends JFrame {
         add(btnInstrucciones);
         add(txtNombre);
 
-        JLabel jNombre1 = new JLabel("INGRESA TU NOMBRE");
-        jNombre1.setBounds(50, 400, 519, 35);
+        JLabel jNombre1 = new JLabel("ingresa tu nombre");
+        jNombre1.setBounds(50, 420, 519, 35);
         add(jNombre1);
-
+        
+         JLabel jTitulo = new JLabel("¡BIENVENIDO A GEOQUEST!");
+        jTitulo.setFont(new Font("Courier New", Font.BOLD, 50));
+        jTitulo.setBounds(0, 330, 1000, 35);
+        jTitulo.setHorizontalAlignment(SwingConstants.CENTER); // Centrar horizontalmente
+        add(jTitulo);
+        
         ManejadorDeEventos manejadorEventos = new ManejadorDeEventos();
 
         btnJugar.addActionListener(manejadorEventos);
@@ -87,7 +93,7 @@ public class VentanaPrincipal extends JFrame {
             } else if (evento.getSource() == btnInstrucciones) {
                 JOptionPane.showMessageDialog(
                         null,
-                        "Escoge la figura correcta, tomando como referencia la imagen de la izquierda",
+                        "Selecciona una figura de tamaño idéntico, basándote en la imagen que se encuentra a la izquierda.",
                         "Instrucciones",
                         JOptionPane.INFORMATION_MESSAGE
                 );
